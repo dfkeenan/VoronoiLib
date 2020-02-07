@@ -10,5 +10,8 @@
             X = x;
             Y = y;
         }
+
+        public bool ApproxEqual(VPoint other)
+            => X.ApproxEqual(other.X) && Y.ApproxEqual(other.Y);
     }
 }

@@ -46,8 +46,15 @@ namespace VoronoiLib
                 var next = edgeNode.Next;
 
                 var valid = ClipEdge(edge, minX, minY, maxX, maxY);
-                if (!valid)
+                if (valid)
+                {
+                    edge.Left.Cell.Add(edge);
+                    edge.Right.Cell.Add(edge);
+                }
+                else
+                {
                     edges.Remove(edgeNode);
+                }
                 //advance
                 edgeNode = next;
             }
