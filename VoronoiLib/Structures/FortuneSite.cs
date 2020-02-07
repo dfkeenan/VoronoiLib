@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace VoronoiLib.Structures
 {
@@ -21,13 +22,14 @@ namespace VoronoiLib.Structures
 
         public IEnumerable<VPoint> GetPolygon()
         {
-            var ed = new Queue<VEdge>(Cell);
+            var edges = new Queue<VEdge>(Cell);
             var poly = new List<VPoint>();
             VEdge edge;
-            VPoint lastPoint = null;
+            VPoint startPoint = null;
+            VPoint endPoint = null;
             do
             {
-                edge = ed.Dequeue();
+                edge = edges.Dequeue();
                 var start = edge.Start;
                 var end = edge.End;
 
@@ -35,27 +37,43 @@ namespace VoronoiLib.Structures
                 {
                     poly.Add(start);
                     poly.Add(end);
-                    lastPoint = end;
+                    startPoint = start;
+                    endPoint = end;
                     continue;
                 }
 
-                if (lastPoint.ApproxEqual(start))
+                if (endPoint.ApproxEqual(start))
                 {
                     poly.Add(end);
-                    lastPoint = end;
+                    endPoint = end;
                 }
-                else if (lastPoint.ApproxEqual(end))
+                else if (endPoint.ApproxEqual(end))
                 {
                     poly.Add(start);
-                    lastPoint = start;
+                    endPoint = start;
+                }
+                else if (startPoint.ApproxEqual(start))
+                {
+                    poly.Insert(0, end);
+                    startPoint = end;
+                }
+                else if (startPoint.ApproxEqual(end))
+                {
+                    poly.Insert(0, start);
+                    startPoint = start;
                 }
                 else
                 {
-                    ed.Enqueue(edge);
+                    edges.Enqueue(edge);
+                }
+
+                if (startPoint.ApproxEqual(endPoint))
+                {
+                    return poly;
                 }
 
             }
-            while (ed.Count > 0);
+            while (edges.Count > 0);
 
             return poly;
         }

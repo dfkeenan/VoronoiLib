@@ -1,5 +1,8 @@
-﻿namespace VoronoiLib.Structures
+﻿using System.Diagnostics;
+
+namespace VoronoiLib.Structures
 {
+    [DebuggerDisplay("Start = {Start}, End = {End}")]
     public class VEdge
     {
         public VPoint Start { get; internal set; }

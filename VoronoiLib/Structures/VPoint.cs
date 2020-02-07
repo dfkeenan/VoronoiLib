@@ -1,5 +1,8 @@
-﻿namespace VoronoiLib.Structures
+﻿using System.Diagnostics;
+
+namespace VoronoiLib.Structures
 {
+    [DebuggerDisplay("({X},{Y})")]
     public class VPoint
     {
         public double X { get; }
