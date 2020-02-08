@@ -8,7 +8,7 @@ namespace VoronoiLib.Structures
         public double X { get; }
         public double Y { get; }
 
-        internal VPoint(double x, double y)
+        public VPoint(double x, double y)
         {
             X = x;
             Y = y;

@@ -20,13 +20,16 @@ namespace VoronoiLib.Structures
             Neighbors = new List<FortuneSite>();
         }
 
-        public IEnumerable<VPoint> GetPolygon()
+        public IEnumerable<IEnumerable<VPoint>> GetPolygons(FortuneSite site, double minX, double minY, double maxX, double maxY)
         {
-            var edges = new Queue<VEdge>(Cell);
+            var result = new List<List<VPoint>>();
+
+            var edges = new Queue<VEdge>(site.Cell);
             var poly = new List<VPoint>();
             VEdge edge;
             VPoint startPoint = null;
             VPoint endPoint = null;
+
             do
             {
                 edge = edges.Dequeue();
@@ -69,13 +72,39 @@ namespace VoronoiLib.Structures
 
                 if (startPoint.ApproxEqual(endPoint))
                 {
-                    return poly;
+                    result.Add(poly);
+                    poly = new List<VPoint>();
+                }
+                else if (IsEdgePoint(startPoint) && IsEdgePoint(endPoint))
+                {
+                    if (startPoint.X == endPoint.X || startPoint.Y == endPoint.Y)
+                    {
+                        //Both on the same side
+                        poly.Add(new VPoint(startPoint.X, startPoint.Y));
+                    }
+                    else
+                    {
+                        //on a corner
+                        double cornerX = startPoint.X == minX || startPoint.X == maxX ? startPoint.X : endPoint.X;
+                        double cornerY = startPoint.Y == minY || startPoint.Y == maxY ? startPoint.Y : endPoint.Y;
+
+                        poly.Add(new VPoint(cornerX, cornerY));
+                        poly.Add(new VPoint(startPoint.X, startPoint.Y));
+                    }
+
+                    result.Add(poly);
+                    poly = new List<VPoint>();
                 }
 
             }
             while (edges.Count > 0);
 
-            return poly;
+            return result;
+
+            bool IsEdgePoint(VPoint point)
+            {
+                return point.X == minX || point.X == maxX || point.Y == minY || point.Y == maxY;
+            }
         }
     }
 }
