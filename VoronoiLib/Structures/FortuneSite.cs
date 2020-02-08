@@ -20,11 +20,11 @@ namespace VoronoiLib.Structures
             Neighbors = new List<FortuneSite>();
         }
 
-        public IEnumerable<IEnumerable<VPoint>> GetPolygons(FortuneSite site, double minX, double minY, double maxX, double maxY)
+        public IEnumerable<IEnumerable<VPoint>> GetPolygons(double minX, double minY, double maxX, double maxY)
         {
             var result = new List<List<VPoint>>();
 
-            var edges = new Queue<VEdge>(site.Cell);
+            var edges = new Queue<VEdge>(Cell);
             var poly = new List<VPoint>();
             VEdge edge;
             VPoint startPoint = null;
